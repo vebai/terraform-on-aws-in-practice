@@ -1,108 +1,127 @@
-# Chapter 12 — Build, Change, Break, and Recover an AWS Environment
+# Chapter 12 — Change, break, diagnose and recover an AWS environment
 
-This capstone continues the Terraform infrastructure built in
-Chapters 4–11. It does not deploy a separate environment.
+**Outcome:** Make one planned configuration change, deliberately interrupt HTTP access to an EC2 web server, confirm the independent management path still works, restore access and verify a clean state.
 
-The complete manuscript examples are preserved in
-[BOOK-CODE.md](BOOK-CODE.md).
+This exercise continues the **same** `terraform-vpc/` VPC, EC2 instance, module and Terraform state used earlier. It does not create a parallel environment.
 
-## Where to Run
+## Preconditions — verify before breaking anything
 
-Run Terraform and AWS CLI commands from your local MacBook
-terminal or an appropriately configured AWS CloudShell session.
+Run from your MacBook terminal or AWS CloudShell, **at the repository root**. Ensure the instance is running and the active workspace and backend are the ones that created it:
 
-The Terraform root directory is `terraform-vpc/`.
+```bash
+aws sts get-caller-identity
+terraform -chdir=terraform-vpc workspace show
+terraform -chdir=terraform-vpc state list
+terraform -chdir=terraform-vpc validate
+terraform -chdir=terraform-vpc plan
+```
 
-Use your own AWS account, Region, IAM permissions and backend.
+Expect a clean plan before starting. If Terraform proposes to create the environment because state is empty, **stop**: this lab needs an already deployed instance.
 
-## 1. Verify the Starting State
+Collect the instance details and baseline HTTP response:
 
-Check your AWS identity and Terraform workspace:
+```bash
+INSTANCE_ID="$(terraform -chdir=terraform-vpc output -raw instance_id)"
+PUBLIC_IP="$(terraform -chdir=terraform-vpc output -raw instance_public_ip)"
+curl --connect-timeout 10 --max-time 20 -i "http://$PUBLIC_IP/"
+```
 
-    aws sts get-caller-identity
-    terraform -chdir=terraform-vpc workspace show
-    terraform -chdir=terraform-vpc validate
-    terraform -chdir=terraform-vpc plan
+Expect `HTTP/1.1 200 OK` (or an equivalent HTTP 200 response).
 
-Review the plan before applying any changes.
+## 1. Make a controlled tag change
 
-Readers continuing the cumulative lab should use the existing
-network, EC2 configuration and Terraform state.
+In `terraform-vpc/ec2.tf`, add this tag under the `tags` map of `aws_instance.main`:
 
-## 2. Make a Controlled Change
+```hcl
+Updated = "2026-01-01"
+```
 
-Add the `Updated` tag to `aws_instance.main` as described
-in the manuscript.
+Then:
 
-Run Terraform validate, plan and apply.
+```bash
+terraform -chdir=terraform-vpc validate
+terraform -chdir=terraform-vpc plan
+```
 
-Verify the tag in AWS and confirm the final plan is clean.
+Ensure the plan proposes **only an in-place tag update**, not instance replacement. After review:
 
-## 3. Break and Recover HTTP Access
+```bash
+terraform -chdir=terraform-vpc apply
+terraform -chdir=terraform-vpc plan
+```
 
-Temporarily remove the
-`aws_vpc_security_group_ingress_rule.http` resource block.
+Check the tag in AWS Console → EC2 → Instances or with `aws ec2 describe-instances`. A clean plan verifies the declared and observed states agree.
 
-Review the Terraform plan. It should destroy only the
-HTTP ingress rule.
+## 2. Break HTTP access but retain management access
 
-After applying the reviewed change:
+Back up the working file **outside the repository**:
 
-- Verify that HTTP access fails.
-- Verify that AWS Systems Manager Session Manager still works.
-- Restore the original HTTP ingress resource.
-- Review and apply the recovery plan.
-- Verify HTTP 200 OK and a clean Terraform plan.
+```bash
+cp terraform-vpc/ec2.tf "$HOME/terraform-ec2-before-http-drill.tf"
+```
 
-Keep a backup of the original configuration.
-Do not commit the temporary failure configuration.
+Temporarily remove the entire `aws_vpc_security_group_ingress_rule.http` resource block from `terraform-vpc/ec2.tf`. Do **not** remove the security group, egress rule, EC2 instance or IAM role.
 
-## 4. Detect and Recover from Drift
+```bash
+terraform -chdir=terraform-vpc validate
+terraform -chdir=terraform-vpc plan
+```
 
-Change the EC2 `Updated` tag manually using the AWS CLI.
+The intended plan removes **one HTTP ingress rule** and nothing else. If more resources would change, stop and investigate. Apply the reviewed change, then test:
 
-Run Terraform plan to observe the difference between
-AWS and the declared configuration.
+```bash
+terraform -chdir=terraform-vpc apply
+curl --connect-timeout 5 --max-time 10 -i "http://$PUBLIC_IP/"
+```
 
-Choose the appropriate recovery path:
+The connection should fail or time out. Independently verify that Session Manager still works:
 
-- Restore AWS to the Terraform configuration.
-- Or update the configuration if the AWS change is intended.
+```bash
+aws ssm start-session --target "$INSTANCE_ID" --region eu-west-2
+```
 
-Verify the final AWS values and Terraform plan.
+Exit the remote shell. If Session Manager fails too, inspect the instance role, SSM agent, networking and your caller permissions before changing additional security rules.
 
-## 5. Import Existing Infrastructure
+## 3. Repair and verify
 
-Follow the Chapter 11 S3 import exercise using a separate
-test bucket, never the Terraform state backend bucket.
+Restore the known-good configuration:
 
-Verify the imported resource in Terraform state and AWS.
+```bash
+cp "$HOME/terraform-ec2-before-http-drill.tf" terraform-vpc/ec2.tf
+terraform -chdir=terraform-vpc validate
+terraform -chdir=terraform-vpc plan
+```
 
-## 6. Clean Up
+The plan should re-create **only the HTTP ingress rule**. Apply after checking:
 
-When finished, back up the state securely and review:
+```bash
+terraform -chdir=terraform-vpc apply
+curl --connect-timeout 10 --max-time 20 -i "http://$PUBLIC_IP/"
+terraform -chdir=terraform-vpc plan
+```
 
-    terraform -chdir=terraform-vpc plan -destroy
+**Success:** HTTP returns 200 and the final Terraform plan has no changes. The exercise shows that you can fail one application path without automatically losing management access.
 
-Only after checking every proposed deletion, run:
+## 4. Optional drift check
 
-    terraform -chdir=terraform-vpc destroy
+Modify only the EC2 `Updated` tag directly in AWS to `2026-01-02` and compare `terraform plan -refresh-only` with a normal `terraform plan`. Restore `2026-01-01` through a reviewed Terraform apply. See [Chapter 11](../chapter-11-troubleshooting/README.md) for the same workflow using `Environment`.
 
-Then verify:
+## 5. Safe shutdown
 
-    terraform -chdir=terraform-vpc state list
+From the **same** backend and workspace, preserve a private state copy outside Git:
 
-The Terraform-managed lab resources should be removed.
+```bash
+umask 077
+terraform -chdir=terraform-vpc state pull > "$HOME/terraform-before-cleanup.tfstate"
+chmod 600 "$HOME/terraform-before-cleanup.tfstate"
+terraform -chdir=terraform-vpc plan -destroy
+```
 
-The separately created S3 backend, its state objects and
-any GitHub OIDC IAM resources require separate cleanup.
+Confirm every proposed deletion belongs to this lab. Only then run:
 
-## Safety
+```bash
+terraform -chdir=terraform-vpc destroy
+terraform -chdir=terraform-vpc state list
+```
 
-Terraform state and backup files must not be committed to Git.
-
-Do not run Terraform apply after completing cleanup unless
-you deliberately intend to recreate the AWS environment.
-
-Do not run the GitHub AWS plan workflow against a destroyed
-environment without understanding its proposed changes.
+An empty `state list` confirms no managed resources remain in this Terraform state. It does **not** delete the separately created, versioned S3 backend or any GitHub OIDC IAM role/provider. Inspect those separately, and do not destroy a shared identity provider or a backend still used elsewhere. Once the infrastructure is gone, `terraform apply` would recreate it, so do not run it unintentionally.

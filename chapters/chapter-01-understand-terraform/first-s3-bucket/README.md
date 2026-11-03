@@ -1,16 +1,31 @@
-# Chapter 1 — first S3 bucket
+# First S3 bucket — complete standalone exercise
 
-The book uses `my-terraform-example-bucket` as a placeholder. Supply a **new, globally unique** bucket name. Region is `eu-west-2` for our tested setup.
+The `main.tf` file in this directory creates one AWS S3 bucket, parameterised by `bucket_name`, and prints its name. It uses `eu-west-2` by default.
+
+## Run from the repository root
 
 ```bash
-cd chapters/chapter-01-understand-terraform/first-s3-bucket
-terraform init
-terraform validate
-terraform plan -var='bucket_name=choose-your-own-unique-name'
-terraform apply -var='bucket_name=choose-your-own-unique-name'
-aws s3api head-bucket --bucket choose-your-own-unique-name --region eu-west-2
-terraform plan -destroy -var='bucket_name=choose-your-own-unique-name'
-terraform destroy -var='bucket_name=choose-your-own-unique-name'
+aws sts get-caller-identity
+export BUCKET_NAME="my-terraform-lab-$(aws sts get-caller-identity --query Account --output text)-$(date +%s)"
+terraform -chdir=chapters/chapter-01-understand-terraform/first-s3-bucket init
+terraform -chdir=chapters/chapter-01-understand-terraform/first-s3-bucket validate
+terraform -chdir=chapters/chapter-01-understand-terraform/first-s3-bucket plan -var="bucket_name=$BUCKET_NAME"
 ```
 
-Replace the name consistently; review the two plans before confirming. The clean-up step should target only the bucket created by this exercise. This lab was previously deployed, verified and cleaned up in AWS with an earlier copy of the configuration; this fresh ZIP still needs validation.
+Check that only one S3 bucket would be created. Apply the reviewed plan and verify:
+
+```bash
+terraform -chdir=chapters/chapter-01-understand-terraform/first-s3-bucket apply -var="bucket_name=$BUCKET_NAME"
+aws s3api head-bucket --bucket "$BUCKET_NAME" --region eu-west-2
+```
+
+A successful `head-bucket` commonly produces no terminal output. Verify the exact bucket in the AWS S3 console as an alternative.
+
+## Clean up
+
+```bash
+terraform -chdir=chapters/chapter-01-understand-terraform/first-s3-bucket plan -destroy -var="bucket_name=$BUCKET_NAME"
+terraform -chdir=chapters/chapter-01-understand-terraform/first-s3-bucket destroy -var="bucket_name=$BUCKET_NAME"
+```
+
+The bucket must be empty. Do not use this lab directory to manage the separate Terraform remote-state bucket. See the [full Chapter 1 walkthrough](../README.md).
