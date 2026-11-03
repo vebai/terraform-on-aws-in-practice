@@ -1,7 +1,19 @@
 # Chapter 10 — Run Terraform Safely in CI/CD
 
-Optional: To manage GitHub repositories and workflows from the terminal, see GitHub CLI Setup.
+This chapter demonstrates Terraform validation, AWS OIDC
+authentication, planning and deployment approval.
 
-The manuscript GitHub Actions workflow is provided as `terraform.example.yml` for copying after configuring trust, roles and approvals. It is **not active** in `.github/workflows` automatically.
+The original manuscript workflow is preserved in
+`terraform.example.yml`. It is not automatically executed.
 
-See [every manuscript listing](BOOK-CODE.md). The original snippets are preserved verbatim, including examples that are incomplete or illustrative.
+The repository also includes tested GitHub Actions workflows
+for validation, authentication, planning and approval checks.
+
+Before enabling AWS workflows, read
+[Workflow Setup and Safety](WORKFLOW-NOTES.md).
+
+For GitHub CLI installation, see
+[GitHub CLI Setup](GITHUB-CLI-SETUP.md).
+
+See [every manuscript listing](BOOK-CODE.md).
+The original examples include illustrative placeholders.
