@@ -1,0 +1,16 @@
+name: Terraform Approval Gate Test
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  approval-test:
+    runs-on: ubuntu-latest
+    environment: terraform-apply
+
+    steps:
+      - name: Confirm approval
+        run: echo "Deployment approval gate passed. No AWS changes made."
