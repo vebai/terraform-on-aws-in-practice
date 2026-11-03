@@ -1,6 +1,6 @@
 # Terraform on AWS in Practice
 
-This is the companion repository for *Terraform on AWS in Practice: Build, Change, and Troubleshoot AWS Infrastructure Safely* by **Victor Ebai**. It provides the Terraform configurations and supporting files used by the book’s hands-on exercises.
+This is the companion repository for the book *Terraform on AWS in Practice: Build, Change, and Troubleshoot AWS Infrastructure Safely* by **Victor Ebai**. It provides the Terraform configurations and supporting files used by the book’s hands-on exercises.
 
 **The book is fully self-contained.** You do not need this repository to understand or complete its learning path. The repository provides convenient, testable copies of the configurations and practical lab guides for readers who prefer to clone and run them.
 
