@@ -1,1 +1,0 @@
-df6ee12ec5a44b5b301ef427ce1942eba796401db9ed5e628f1c1bbea4243117  Terraform on AWS in Practice-papperback(1).docx

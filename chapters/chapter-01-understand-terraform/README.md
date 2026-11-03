@@ -4,7 +4,9 @@
 
 ## Before you begin
 
-Install Terraform 1.10+, AWS CLI v2 and configure an AWS identity allowed to create and delete a test S3 bucket. Check the account:
+**First-time setup:** [Install Terraform 1.10+, AWS CLI v2 and configure an AWS identity](../../docs/SETUP.md).
+
+Use an AWS identity authorised to create and delete a test S3 bucket. Check the account:
 
 ```bash
 aws sts get-caller-identity

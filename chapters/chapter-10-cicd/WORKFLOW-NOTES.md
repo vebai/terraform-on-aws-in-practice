@@ -1,8 +1,6 @@
 # GitHub Actions — Setup and Verification
 
-`terraform.example.yml` preserves the Chapter 10 manuscript
-workflow, including its original placeholders and example Region.
-It is educational and is not automatically executed.
+`terraform.example.yml` is an optional workflow template. Configure the Region, IAM trust, role, permissions and approvals before enabling it.
 
 ## Tested Workflows
 

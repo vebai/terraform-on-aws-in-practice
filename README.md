@@ -22,6 +22,8 @@ By working through the labs, you will learn to:
 
 ## Before you begin
 
+**First-time setup:** [Install Terraform 1.10+, AWS CLI v2 and configure an AWS identity](docs/SETUP.md).
+
 You need:
 
 - **Terraform 1.10 or later, below 2.0** (the configuration uses the AWS provider 6.x).
@@ -123,6 +125,11 @@ terraform -chdir=terraform-vpc state list
 ```
 
 A separately created S3 state bucket, retained object versions and GitHub OIDC IAM test resources may require additional cleanup. **Do not delete the state backend before removing the infrastructure it manages.** Follow the relevant chapter README for any exercise-specific checks.
+
+## Command references
+
+- [Appendix A — Terraform commands](docs/appendix-a/README.md)
+- [Appendix B — Pre-change verification](docs/appendix-b/README.md)
 
 ---
 

@@ -32,4 +32,4 @@ backend "s3" {
 }
 ```
 
-Preserve your current local Terraform state before modifying the backend. Run `terraform init -migrate-state` **from the same working directory that holds the current state** and verify the state after migration. Do not migrate an empty folder or accidentally overwrite existing remote state. Never delete the state bucket as part of the VPC lab cleanup. See the verbatim examples in `BOOK-CODE.md`.
+Preserve your current local Terraform state before modifying the backend. Run `terraform init -migrate-state` **from the same working directory that holds the current state** and verify the state after migration. Do not migrate an empty folder or accidentally overwrite existing remote state. Never delete the state bucket as part of the VPC lab cleanup.
