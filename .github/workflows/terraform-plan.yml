@@ -1,0 +1,44 @@
+name: Terraform AWS Plan
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  plan:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        working-directory: terraform-vpc
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install Terraform
+        uses: hashicorp/setup-terraform@v4
+        with:
+          terraform_version: "1.16.3"
+
+      - name: Authenticate to AWS
+        uses: aws-actions/configure-aws-credentials@v6.3.0
+        with:
+          role-to-assume: arn:aws:iam::760208981862:role/terraform-book-gh-oidc-test
+          aws-region: eu-west-2
+
+      - name: Initialise S3 backend
+        run: |
+          terraform init -input=false \
+            -backend-config="bucket=tfstate-terraform-book-760208981862-euw2" \
+            -backend-config="key=terraform-vpc/terraform.tfstate" \
+            -backend-config="region=eu-west-2" \
+            -backend-config="encrypt=true" \
+            -backend-config="use_lockfile=true"
+
+      - name: Review Terraform plan
+        run: terraform plan -input=false -no-color -lock-timeout=60s -detailed-exitcode
