@@ -8,9 +8,9 @@ This is the companion repository for the book *Terraform on AWS in Practice: Bui
 
 The Amazon UK listing offers paperback and Kindle editions.
 
-![Terraform capstone overview showing a single-AZ VPC, a public EC2 web server accessed via Session Manager, an isolated private subnet and S3 remote state.](docs/images/terraform-aws-capstone.png)
+![Terraform on AWS learning overview showing an example VPC, Terraform state management, CI/CD and the Terraform change workflow.](docs/images/terraform-aws-capstone.png)
 
-*The capstone runs in `eu-west-2`. Only the public subnet routes to the internet gateway. The private subnet has local VPC routes only.*
+*The checked-in capstone runs in `eu-west-2` with one EC2 web server in the public subnet. The private subnet is reserved for future use and has local VPC routes only.*
 
 See [Chapter 6](chapters/chapter-06-remote-state/README.md) for S3 state locking and [Chapter 10](chapters/chapter-10-cicd/README.md) for GitHub Actions and AWS OIDC.
 
