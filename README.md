@@ -2,6 +2,18 @@
 
 This is the companion repository for the book *Terraform on AWS in Practice: Build, Change, and Troubleshoot AWS Infrastructure Safely* by **Victor Ebai**. It provides the Terraform configurations and supporting files used by the book’s hands-on exercises.
 
+## Get the book
+
+**[Buy on Amazon UK](https://www.amazon.co.uk/dp/B0HQDW78NF)** · **[Buy on Amazon US](https://www.amazon.com/dp/B0HQDW78NF)**
+
+The Amazon UK listing offers paperback and Kindle editions.
+
+![Terraform capstone overview showing a single-AZ VPC, a public EC2 web server accessed via Session Manager, an isolated private subnet and S3 remote state.](docs/images/terraform-aws-capstone.png)
+
+*The capstone runs in `eu-west-2`. Only the public subnet routes to the internet gateway. The private subnet has local VPC routes only.*
+
+See [Chapter 6](chapters/chapter-06-remote-state/README.md) for S3 state locking and [Chapter 10](chapters/chapter-10-cicd/README.md) for GitHub Actions and AWS OIDC.
+
 **The book is fully self-contained.** You do not need this repository to understand or complete its learning path. The repository provides convenient, testable copies of the configurations and practical lab guides for readers who prefer to clone and run them.
 
 Build an AWS network, run an EC2 web server, manage Terraform state, **validate changes with GitHub Actions**, and practise recovering from infrastructure changes.
@@ -134,3 +146,9 @@ A separately created S3 state bucket, retained object versions and GitHub OIDC I
 ---
 
 **Start here:** [Chapter 1 — Your first Terraform-managed AWS resource](chapters/chapter-01-understand-terraform/README.md)
+
+## Continue with the book
+
+**[Buy on Amazon UK](https://www.amazon.co.uk/dp/B0HQDW78NF)** · **[Buy on Amazon US](https://www.amazon.com/dp/B0HQDW78NF)** for the complete explanations, architecture trade-offs and guided troubleshooting exercises.
+
+**Also by Victor Ebai:** [*Kubernetes in Practice*](https://github.com/vebai/kubernetes-in-practice) covers deploying, operating and troubleshooting Kubernetes applications from Docker to Amazon EKS.
