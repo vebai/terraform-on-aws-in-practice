@@ -2,15 +2,15 @@
 
 This is the companion repository for the book *Terraform on AWS in Practice: Build, Change, and Troubleshoot AWS Infrastructure Safely* by **Victor Ebai**. It provides the Terraform configurations and supporting files used by the book’s hands-on exercises.
 
-## Get the book
+## Get the paperback
 
-**[Buy on Amazon UK](https://www.amazon.co.uk/dp/B0HQDW78NF)** · **[Buy on Amazon US](https://www.amazon.com/dp/B0HQDW78NF)**
+**[Amazon UK — Paperback](https://www.amazon.co.uk/dp/B0HQDW78NF)** (default) · [Amazon US — Paperback](https://www.amazon.com/dp/B0HQDW78NF) · [Amazon India — Find paperback by ISBN](https://www.amazon.in/s?k=9798167909243&i=stripbooks)
 
-The Amazon UK listing offers paperback and Kindle editions.
+**Quick navigation:** [Getting started](#getting-started) · [Chapter index](#choose-your-starting-point) · [Repository layout](#how-the-repository-is-organised) · [CI/CD workflows](#github-actions) · [Cleanup](#cleaning-up)
 
-![Terraform on AWS learning overview showing an example VPC, Terraform state management, CI/CD and the Terraform change workflow.](docs/images/terraform-aws-capstone.png)
+![The Terraform diagnostic model comparing intended configuration, Terraform state, and actual AWS infrastructure, with aligned and mismatched examples.](docs/images/terraform-diagnostic-model.svg)
 
-*The checked-in capstone runs in `eu-west-2` with one EC2 web server in the public subnet. The private subnet is reserved for future use and has local VPC routes only.*
+*Terraform on AWS in Practice teaches you to compare what the configuration declares, what state records, and what actually exists in AWS before making an infrastructure change.*
 
 See [Chapter 6](chapters/chapter-06-remote-state/README.md) for S3 state locking and [Chapter 10](chapters/chapter-10-cicd/README.md) for GitHub Actions and AWS OIDC.
 
@@ -112,6 +112,8 @@ terraform -chdir=terraform-vpc validate
 
 These commands prepare and check the configuration; they do not create AWS resources. If you already use a remote backend for a live lab, **do not reinitialise it with a different backend merely to validate**. Keep your existing backend and workspace.
 
+**Optional shortcut (macOS/Linux with Make installed):** after initialising the correct working directory and backend, run `make validate` to check formatting and configuration, `make plan` to review proposed infrastructure changes, or `make clean-check` to inspect a destroy plan. These targets never apply or destroy resources; the explicit Terraform commands above remain the recommended starting point.
+
 When you are ready to work with live infrastructure, initialise the intended backend, check your AWS account and workspace, and review `terraform plan` before proceeding. See [Chapter 6](chapters/chapter-06-remote-state/README.md) for state migration and locking. **If you are starting without existing state, the plan may propose creating the entire cumulative lab. That is expected; it is not permission to apply changes automatically.**
 
 ## GitHub Actions
@@ -138,6 +140,10 @@ terraform -chdir=terraform-vpc state list
 
 A separately created S3 state bucket, retained object versions and GitHub OIDC IAM test resources may require additional cleanup. **Do not delete the state backend before removing the infrastructure it manages.** Follow the relevant chapter README for any exercise-specific checks.
 
+## Licence
+
+The example code is available under the [MIT License](LICENSE). Book text, cover art and illustrations are © 2026 Victor Ebai and are not included in the code licence.
+
 ## Command references
 
 - [Appendix A — Terraform commands](docs/appendix-a/README.md)
@@ -149,6 +155,6 @@ A separately created S3 state bucket, retained object versions and GitHub OIDC I
 
 ## Continue with the book
 
-**[Buy on Amazon UK](https://www.amazon.co.uk/dp/B0HQDW78NF)** · **[Buy on Amazon US](https://www.amazon.com/dp/B0HQDW78NF)** for the complete explanations, architecture trade-offs and guided troubleshooting exercises.
+**[Amazon UK paperback](https://www.amazon.co.uk/dp/B0HQDW78NF)** · [Amazon US paperback](https://www.amazon.com/dp/B0HQDW78NF) · [Find the paperback on Amazon India](https://www.amazon.in/s?k=9798167909243&i=stripbooks) — for the complete explanations, architecture trade-offs and guided troubleshooting exercises.
 
 **Also by Victor Ebai:** [*Kubernetes in Practice*](https://github.com/vebai/kubernetes-in-practice) covers deploying, operating and troubleshooting Kubernetes applications from Docker to Amazon EKS.
