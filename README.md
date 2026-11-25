@@ -4,7 +4,7 @@ This is the companion repository for the book *Terraform on AWS in Practice: Bui
 
 ## Get the paperback
 
-**[Amazon UK — Paperback](https://www.amazon.co.uk/dp/B0HQDW78NF)** (default) · [Amazon US — Paperback](https://www.amazon.com/dp/B0HQDW78NF) · [Amazon India — Find paperback by ISBN](https://www.amazon.in/s?k=9798167909243&i=stripbooks)
+**[Amazon UK — Paperback](https://www.amazon.co.uk/dp/B0HQDW78NF)** · [Amazon US — Paperback](https://www.amazon.com/dp/B0HQDW78NF) · [Amazon India — Find paperback by ISBN](https://www.amazon.in/s?k=9798167909243&i=stripbooks)
 
 **Quick navigation:** [Getting started](#getting-started) · [Chapter index](#choose-your-starting-point) · [Repository layout](#how-the-repository-is-organised) · [CI/CD workflows](#github-actions) · [Cleanup](#cleaning-up)
 
