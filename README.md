@@ -2,9 +2,13 @@
 
 This is the companion repository for the book *Terraform on AWS in Practice: Build, Change, and Troubleshoot AWS Infrastructure Safely* by **Victor Ebai**. It provides the Terraform configurations and supporting files used by the book’s hands-on exercises.
 
-## Get the paperback
+## Get the book on Amazon
 
-**[Amazon UK — Paperback](https://www.amazon.co.uk/dp/B0HQDW78NF)** · [Amazon US — Paperback](https://www.amazon.com/dp/B0HQDW78NF) · [Amazon India — Find paperback by ISBN](https://www.amazon.in/s?k=9798167909243&i=stripbooks)
+<a id="get-the-paperback"></a>
+
+**Paperback:** [Amazon UK](https://www.amazon.co.uk/dp/B0HQDW78NF) · [Amazon US](https://www.amazon.com/dp/B0HQDW78NF) · [Amazon India](https://www.amazon.in/dp/B0HQDW78NF)
+
+**Kindle eBook:** [Amazon UK](https://www.amazon.co.uk/dp/B0HQD3ZW15) · [Amazon US](https://www.amazon.com/dp/B0HQD3ZW15) · [Amazon India](https://www.amazon.in/dp/B0HQD3ZW15)
 
 **Quick navigation:** [Getting started](#getting-started) · [Chapter index](#choose-your-starting-point) · [Repository layout](#how-the-repository-is-organised) · [CI/CD workflows](#github-actions) · [Cleanup](#cleaning-up)
 
@@ -155,6 +159,6 @@ The example code is available under the [MIT License](LICENSE). Book text, cover
 
 ## Continue with the book
 
-**[Amazon UK paperback](https://www.amazon.co.uk/dp/B0HQDW78NF)** · [Amazon US paperback](https://www.amazon.com/dp/B0HQDW78NF) · [Find the paperback on Amazon India](https://www.amazon.in/s?k=9798167909243&i=stripbooks) — for the complete explanations, architecture trade-offs and guided troubleshooting exercises.
+See [Get the book on Amazon](#get-the-book-on-amazon) for paperback and Kindle editions with the complete explanations, architecture trade-offs and guided troubleshooting exercises.
 
 **Also by Victor Ebai:** [*Kubernetes in Practice*](https://github.com/vebai/kubernetes-in-practice) covers deploying, operating and troubleshooting Kubernetes applications from Docker to Amazon EKS.
